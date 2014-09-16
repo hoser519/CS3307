@@ -73,7 +73,7 @@ public:
 
 	void menu(){
 
-		cout<<"-----------------MENU MAKER--------------------------\n\t"
+		cout<<"-----------------MENU MANAGER--------------------------\n\t"
 						"1 - open an account\n\t"
 						"2 - close an account\n\t"
 						"3 - view an account\n\t"

@@ -143,10 +143,17 @@ public:
 		cin >> withdraw;
 
 
-		cout << "Withdraw to Savings or Chequing (s|c)";
+		cout << "Withdraw from Savings or Chequing (s|c)";
 		char sc;
 		cin >> sc;
-		if (sc == 's') savingsBalance -= withdraw;
+		if (sc == 's') {
+			int tempWithdraw = savingsBalance - withdraw;
+			if (tempWithdraw < 0) {
+				cout << "Can only withdraw " << (tempWidthdraw + withdraw);
+				savingsBalance -= ( withdraw + tempWidthdraw ) ;
+			}
+			savingsBalance -= withdraw;
+		}
 		if (sc == 'c') {
 			if ((chequingBalance - withdraw) <= 1000) {
 				cout << "Warning - Resulting balance will be less then $1000 - a $2 charge will be levied, proceed? (y|n)";

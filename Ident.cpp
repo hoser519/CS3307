@@ -142,6 +142,7 @@ public:
 		double withdraw;
 		cin >> withdraw;
 
+
 		cout << "Withdraw to Savings or Chequing (s|c)";
 		char sc;
 		cin >> sc;
@@ -157,15 +158,83 @@ public:
 				chequingBalance -= withdraw;
 			}
 		}
+
+		// Update database
+		ifstream myReadFile;
+		ofstream myWriteFile;
+	    myWriteFile.open("temp.txt");
+		myReadFile.open("database.txt");
+
+		int temp_id, temp_chequing, temp_savings;
+		string temp_type;
+		int insert_point;
+
+		if (myReadFile.is_open()) {
+				 while (!myReadFile.eof()) {
+					 // check id
+						while (myReadFile >> temp_id >> temp_type >> temp_chequing >> temp_savings ){
+							if(temp_id == num ){
+								myWriteFile << temp_id << "\t"  << temp_type << "\t" << chequingBalance << "\t" <<  savingsBalance << '\n';
+							} else {
+								myWriteFile << temp_id << "\t"  << temp_type << "\t" << temp_chequing << "\t" <<  temp_savings << '\n';
+							}
+						}
+
+				 }
+		}
+		myReadFile.close();
+		myWriteFile.close();
+		rename("temp.txt","database.txt");
 		cout << "Updated ";
 		view_balance();
-	}
-	void check_sufficient_funds(){
+
 
 	}
+
+
+
 	void transfer(){// change information in database
 
+		cout << "Transfer to user ID: ";
+		int user_id;
+		cin >> user_id;
+
+		cout << "\nTransfer amount: $";
+		int amount;
+		cin >> amount;
+
+		// Update database
+		ifstream myReadFile;
+		ofstream myWriteFile;
+		myWriteFile.open("temp.txt");
+		myReadFile.open("database.txt");
+
+		int temp_id, temp_chequing, temp_savings;
+		string temp_type;
+
+		if (myReadFile.is_open()) {
+				 while (!myReadFile.eof()) {
+					 // check id
+					while (myReadFile >> temp_id >> temp_type >> temp_chequing >> temp_savings ){
+						if ( temp_id == user_id ){
+								myWriteFile << temp_id << "\t"  << temp_type << "\t" << (temp_chequing + amount) << "\t" << temp_savings << '\n';
+						} else if  (temp_id == num ) {
+								myWriteFile << temp_id << "\t"  << temp_type << "\t" << (temp_chequing - amount) << "\t" << temp_savings << '\n';
+						} else {
+								myWriteFile << temp_id << "\t"  << temp_type << "\t" << temp_chequing << "\t" <<  temp_savings << '\n';
+						}
+					}
+				 }
+			}
+
+		cout << "$" << amount << " transfered from " << num << " to " << user_id;
+		myReadFile.close();
+		myWriteFile.close();
+		rename("temp.txt","database.txt");
+
 	}
+
+
 	void view_balance(){
 		cout << "Client Balance:\n\n " <<
 				"\tSavings:\t$" << savingsBalance <<
@@ -173,9 +242,6 @@ public:
 
 	}
 	void warning_message(){
-
-	}
-	void open_new_account(){
 
 	}
 
@@ -216,11 +282,21 @@ public:
 };
 //=============================== Database class =============================================
 
+class User {
+
+	private:
+	 int id, chequingBalance, savingsBalance;
+	 string user_type; // manager, client, or maint
+
+};
+
 
 class Database{
 private:
 	int num, chequing, savings;
 	string user_type; // manager, client, or maint
+
+
 
 public:
 
@@ -233,7 +309,7 @@ public:
 		 myReadFile.open("database.txt");
 		 int temp_id, temp_chequing, temp_savings;
 		 string temp_type;
-
+		 cout << "here";
 		 if (myReadFile.is_open()) {
 			 while (!myReadFile.eof()) {
 				while (myReadFile >> temp_id >> temp_type >> temp_chequing >> temp_savings ){
@@ -242,6 +318,8 @@ public:
 						savings = temp_savings;
 						user_type = temp_type;
 					}
+					 cout << "here1";
+
 				}
 			 }
 		}
